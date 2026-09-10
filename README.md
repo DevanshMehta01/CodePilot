@@ -1,104 +1,198 @@
-# CodePilot<>
+	````markdown
+	# CodePilot<>
 
-**CodePilot<>** is an AI-powered codebase assistant built with **Java, Spring Boot, Spring AI, Gemini, PostgreSQL, and pgvector**.
+	**CodePilot<>** is an AI-powered codebase assistant built with **Java 21, Spring Boot, Spring AI, Gemini, PostgreSQL, and pgvector**.
 
-It uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant source code and provide grounded answers to developers' questions about their codebase.
+	It uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant source-code context and provide grounded answers to developers' questions about a codebase.
 
-## Features
+	## Features
 
-* Project and source-code management
-* Source-code chunking and indexing
-* Semantic search using pgvector
-* RAG-based codebase Q&A
-* Source references in responses
-* REST APIs with Swagger/OpenAPI
-* Simple HTML/CSS/JavaScript frontend
-* Docker-based PostgreSQL + pgvector setup
+	- RESTful backend built with **Spring Boot**
+	- Project and source-code management
+	- Source-code chunking and indexing
+	- Semantic search using **PostgreSQL + pgvector**
+	- RAG-based codebase question answering
+	- AI integration using **Spring AI + Gemini**
+	- Source-file references in responses
+	- Swagger/OpenAPI documentation
+	- Simple HTML/CSS/JavaScript frontend
+	- Docker-based PostgreSQL + pgvector setup
 
-## Tech Stack
+	## Tech Stack
 
-**Java 21 · Spring Boot · Spring AI · Gemini · PostgreSQL · pgvector · Maven · Docker · HTML/CSS/JavaScript**
+	**Backend:** Java 21, Spring Boot, Spring AI, Maven  
+	**AI:** Gemini, Retrieval-Augmented Generation (RAG), Embeddings  
+	**Database:** PostgreSQL, pgvector, Spring Data JPA  
+	**API:** REST, Swagger/OpenAPI  
+	**Frontend:** HTML, CSS, JavaScript  
+	**Infrastructure:** Docker
 
-## RAG Workflow
+	## Architecture
 
-```text
-Source Code
-    ↓
-Chunking & Embeddings
-    ↓
-PostgreSQL + pgvector
-    ↓
-User Question
-    ↓
-Similarity Search
-    ↓
-Relevant Code Context
-    ↓
-Gemini
-    ↓
-Answer + Sources
-```
+	```text
+	                    CodePilot
+	                        │
+	        ┌───────────────┴───────────────┐
+	        │                               │
+	   Frontend                         Spring Boot
+	 HTML/CSS/JS                         Backend
+	                                        │
+	                    ┌───────────────────┼───────────────────┐
+	                    │                   │                   │
+	               REST APIs          Spring Data JPA      Spring AI
+	                    │                   │                   │
+	                    │              PostgreSQL          Gemini
+	                    │                   │
+	                    │                pgvector
+	                    │
+	                    └──────── RAG Pipeline ────────┐
+	                                                    │
+	                                      Retrieve relevant
+	                                         code context
+	                                                    │
+	                                                    ↓
+	                                              AI-generated
+	                                                 answer
+	````
 
-## Project Structure
+	## How It Works
 
-```text
-CodePilot/
-├── backend/
-├── frontend/
-├── docker-compose.yml
-├── .env.example
-├── .gitignore
-└── README.md
-```
+	CodePilot uses **Spring Boot as the main backend application**, handling REST APIs, business logic, database interaction, and integration with the AI/RAG pipeline.
 
-## Getting Started
+	### 1. Project & Code Management
 
-### Prerequisites
+	The Spring Boot REST API receives project and source-code data from the frontend and manages the application workflow.
 
-* Java 21
-* Maven
-* Docker
-* Gemini API key
+	### 2. Code Indexing
 
-### 1. Configure environment variables
+	Source files are divided into smaller code chunks. **Spring AI** is used to generate embeddings for these chunks, which are stored in **PostgreSQL with pgvector**.
 
-Create a `.env` file based on `.env.example` and provide your local database credentials and Gemini API key.
+	### 3. User Question
 
-> Never commit `.env` or API keys to GitHub.
+	A developer asks a natural-language question about the codebase:
 
-### 2. Start PostgreSQL + pgvector
+	```text
+	How does authentication work in this project?
+	```
 
-```bash
-docker compose up -d
-```
+	The request is received by a **Spring Boot REST controller**.
 
-### 3. Run the application
+	### 4. Retrieval
 
-```bash
-cd backend
-mvn spring-boot:run
-```
+	Spring AI converts the question into an embedding and performs a vector similarity search against pgvector.
 
-The application runs on:
+	The most relevant code chunks are retrieved as context.
 
-**[http://localhost:8080](http://localhost:8080)**
+	### 5. AI Generation
 
+	The retrieved code context is passed to **Gemini through Spring AI**.
 
-## Example
+	Gemini generates an answer grounded in the retrieved project context.
 
-```text
-How does authentication work in this project?
-```
+	### 6. Response
 
-CodePilot retrieves the most relevant code from the indexed project and uses it as context to generate a grounded response.
+	Spring Boot processes the AI response and returns the answer and relevant source references through the REST API.
 
-## Future Improvements
+	```text
+	Developer
+	    ↓
+	Frontend
+	    ↓
+	Spring Boot REST API
+	    ↓
+	RAG Service
+	    ↓
+	Spring AI
+	    ├── Embedding Model
+	    ├── pgvector Similarity Search
+	    └── Gemini
+	    ↓
+	Answer + Source References
+	    ↓
+	Frontend
+	```
 
-* GitHub repository integration
-* GitHub OAuth
-* Automatic repository indexing
-* Conversation history
-* Streaming responses
-* Improved code-aware chunking
+	## Spring Boot Responsibilities
 
+	Spring Boot acts as the central backend layer and is responsible for:
 
+	* Exposing REST endpoints
+	* Handling HTTP requests and responses
+	* Request validation
+	* Project and source-code management
+	* Business/service-layer logic
+	* Database interaction through Spring Data JPA
+	* Vector-store integration
+	* RAG orchestration
+	* AI integration through Spring AI
+	* Exception handling
+	* API documentation with Swagger/OpenAPI
+
+	This keeps the frontend, business logic, database, and AI components separated into manageable layers.
+
+	## Project Structure
+
+	```text
+	CodePilot/
+	├── backend/
+	│   └── Spring Boot application
+	├── frontend/
+	│   └── HTML/CSS/JavaScript UI
+	├── docker-compose.yml
+	├── .env.example
+	├── .gitignore
+	└── README.md
+	```
+
+	## Getting Started
+
+	### Prerequisites
+
+	* Java 21
+	* Maven
+	* Docker
+	* Gemini API key
+
+	### 1. Configure Environment Variables
+
+	Create a `.env` file based on `.env.example` and configure the PostgreSQL and Gemini credentials.
+
+	> Never commit `.env` or API keys to GitHub.
+
+	### 2. Start PostgreSQL + pgvector
+
+	```bash
+	docker compose up -d
+	```
+
+	### 3. Run the Backend
+
+	```bash
+	cd backend
+	mvn spring-boot:run
+	```
+
+	Application:
+
+	**[http://localhost:8080](http://localhost:8080)**
+
+	
+	## Example
+
+	```text
+	Question:
+	Where is the database connection configured?
+
+	CodePilot:
+	Retrieves the relevant code from the indexed project and
+	generates an explanation with the corresponding source reference.
+	```
+
+	## Future Improvements
+
+	* GitHub repository integration
+	* GitHub OAuth
+	* Automatic repository indexing
+	* Conversation history
+	* Streaming responses
+	* Improved code-aware chunking
