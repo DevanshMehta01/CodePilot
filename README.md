@@ -1,6 +1,6 @@
-# CodePilot
+# CodePilot<>
 
-**CodePilot** is an AI-powered codebase assistant built with **Java, Spring Boot, Spring AI, Gemini, PostgreSQL, and pgvector**.
+**CodePilot<>** is an AI-powered codebase assistant built with **Java, Spring Boot, Spring AI, Gemini, PostgreSQL, and pgvector**.
 
 It uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant source code and provide grounded answers to developers' questions about their codebase.
 
