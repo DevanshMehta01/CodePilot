@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CodePilot<></title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="topbar">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">cp</span>
+            <span class="brand-name">CodePilot<></span>
+        </a>
+        <span class="topbar-meta" id="topbar-project-name"></span>
+    </div>
+
+    <main class="page">
+        <a class="back-link" href="index.html">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12 6 8l4-4"/></svg>
+            Projects
+        </a>
+
+        <div id="error-box" class="alert" role="alert"></div>
+
+        <h1 id="project-name">Loading&hellip;</h1>
+        <p class="page-subtitle" id="project-description"></p>
+
+        <div class="workspace">
+            <div class="panel">
+                <p class="section-label">Files</p>
+                <ul id="file-list" class="file-list"></ul>
+
+                <form id="upload-form">
+                    <div class="field">
+                        <input type="file" id="file-input" multiple>
+                    </div>
+                    <button type="submit" class="btn-secondary">Upload files</button>
+                </form>
+
+                <hr class="panel-divider">
+
+                <button id="index-btn" class="btn-primary" style="width: 100%;">Index project</button>
+                <div id="index-status" class="status-line"></div>
+            </div>
+
+            <div class="panel chat-panel">
+                <p class="section-label">Ask CodePilot<></p>
+                <div id="chat-log" class="chat-log"></div>
+                <div class="chat-input-row">
+                    <form id="chat-form">
+                        <input type="text" id="chat-input" placeholder="How does product creation work?" required autocomplete="off">
+                        <button type="submit" class="btn-primary">Ask</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/project.js"></script>
+</body>
+</html>

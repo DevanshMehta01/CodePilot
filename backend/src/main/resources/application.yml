@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: codepilot
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/codepilot
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  ai:
+    model:
+      chat: google-genai
+      embedding:
+        text: google-genai
+
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: gemini-3.6-flash
+            temperature: 0.3
+        embedding:
+          api-key: ${GEMINI_API_KEY}
+          text:
+            options:
+                model: gemini-embedding-001
+                dimensions: 1536
+
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1536
+
+server:
+  port: 8080
